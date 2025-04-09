@@ -1,19 +1,19 @@
-# Panomarket
+# Pano
 
-The open-source centralized exchange for anything.
+We all hear about decentralized crypto and NFTs, but nearly everyone interfaces with them through centralized exchanges (i.e. coinbase, binance, etc). Also they are limited to crypto assets. Pano is a centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for anything. Built on Cloudflare's edge infrastructure, it provides global scalability and low-latency trading capabilities of up to ~100 orders/second for any asset pair.
 
 ## Overview
 
-Panomarket is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare's edge infrastructure, it provides global scalability and ultra-low latency trading capabilities.
+Pano Market is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare's edge infrastructure, it provides global scalability and low-latency trading capabilities.
 
 ## Features
 
 - **Create Markets for Anything**: Anyone can create and operate markets for any asset pair
 - **Global Scalability**: Leveraging Cloudflare's global network for worldwide accessibility
-- **Ultra-Low Latency**: Built for high-performance trading with minimal delay
+- **Low Latency**: Built for high-performance trading with minimal delay
 - **Serverless Architecture**: No servers to maintain, scale automatically with demand
 - **Complete Customizability**: Adapt and extend to meet specific market requirements
-- **High Throughput**: Handle up to 100 orders/second for any asset pair
+- **High Throughput**: Handle up to ~100 orders/second for any asset pair
 - **Isolated Markets**: Each market runs in its own Durable Object for data consistency and reliability
 
 ## Technology Stack
@@ -85,7 +85,7 @@ npx wrangler deploy
 
 ## API Reference
 
-Panomarket exposes RESTful APIs for interacting with markets:
+Pano exposes RESTful APIs for interacting with markets:
 
 ### Market Endpoints
 
@@ -140,6 +140,7 @@ Panomarket uses Cloudflare Durable Objects to create isolated markets. Each mark
 - Prediction markets
 - NFT marketplaces
 - Carbon credit trading
+- Any other asset that can be traded
 
 ## Contributing
 
@@ -162,7 +163,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Split sell and buy orderbooks into separate Durable Objects to effectively double the rate of orders that can be processed per second
 - Persist orders and balances to D1 databases for reads
 - Offload finished orders to conserve Durable Object storage
-- Add user authentication to the API
+- Add user authentication options to the API
 - Add ip/user rate limiting to the API
 
 ## License
