@@ -1,4 +1,4 @@
-# Pano
+# 💸 Pano - the open-source centralized exchange for anything
 
 We all hear about decentralized crypto and NFTs, but nearly everyone interfaces with them through centralized exchanges (i.e. coinbase, binance, etc). Also they are limited to crypto assets. Pano is a centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for anything. Built on Cloudflare's edge infrastructure, it provides global scalability and low-latency trading capabilities of up to ~100 orders/second for any asset pair.
 
