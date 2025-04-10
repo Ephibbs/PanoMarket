@@ -35,7 +35,7 @@ export default {
 			} else if (path.startsWith('/markets-manage')) {
 				return await handleMarketsManagementRoutes(request, env, path);
 			} else {
-				return await handleMarketRoutes(request, env, path);
+				return await handleMarketRoutes(request, env, path, ctx);
 			}
 		} catch (error) {
 			console.error('Unhandled error:', error);

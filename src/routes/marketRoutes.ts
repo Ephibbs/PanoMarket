@@ -9,7 +9,8 @@ import { TradeService } from '../tradeService';
 export async function handleMarketRoutes(
 	request: Request,
 	env: Env,
-	path: string
+	path: string,
+	context: ExecutionContext
 ): Promise<Response> {
 	const segments = path.split('/').filter(Boolean);
 	
@@ -59,29 +60,46 @@ export async function handleMarketRoutes(
 		// Reserve balance for the order
 		const balancesId = env.BALANCES.idFromName('global');
 		const balancesStub = env.BALANCES.get(balancesId) as unknown as BalancesStub;
-
+        let start, end;
+        start = Date.now();
 		const reserveResult = await balancesStub.reserveBalance(order);
+        end = Date.now();
+        console.log(` - Reserve balance outer took ${end - start}ms`);
 		
 		if (!reserveResult) {
 			return errorResponse('Insufficient balance');
 		}
 		
 		// Process the order
+        start = Date.now();
 		const { status, trades, remainingQuantity, orderStatus } = await stub.handleOrder(order);
+        end = Date.now();
+        console.log(` - Handle order outer took ${end - start}ms`);
 
-		// Update balances based on trades
-		const updateResult = await balancesStub.updateBalances(trades);
-		
-		if (!updateResult) {
-			return errorResponse('Failed to update balances');
-		}
-		
-		// Save trades to D1 database
-		if (trades.length > 0) {
-			const tradeService = new TradeService(env.TRADES_DB);
-			await tradeService.saveTrades(trades);
-		}
-		return jsonResponse({ status, trades, remainingQuantity, orderStatus });
+        // Send immediate response
+        const response = { status, trades, remainingQuantity, orderStatus };
+        
+        // Process remaining operations using waitUntil
+        context.waitUntil((async () => {
+            // Update balances based on trades
+            start = Date.now();
+            await balancesStub.updateBalances(trades);
+            end = Date.now();
+            console.log(` - Update balances took ${end - start}ms`);
+            
+            // Save trades to D1 database
+            start = Date.now();
+            if (trades.length > 0) {
+                const tradeService = new TradeService(env.PANOMARKET_DB);
+                await tradeService.saveTrades(trades);
+            }
+            end = Date.now();
+            console.log(` - Save trades took ${end - start}ms`);
+        })().catch(error => {
+            console.error('Error in async operations:', error);
+        }));
+
+        return jsonResponse(response);
 	}
 
 	return errorResponse('Not found', 404);

@@ -10,7 +10,7 @@ export async function handleTradeRoutes(
 	env: Env,
 	path: string
 ): Promise<Response> {
-	const tradeService = new TradeService(env.TRADES_DB);
+	const tradeService = new TradeService(env.PANOMARKET_DB);
 	const segments = path.split('/').filter(Boolean);
 	
 	// GET /trades - Get all trades

@@ -11,7 +11,7 @@ export async function handleMarketsManagementRoutes(
 	env: Env,
 	path: string
 ): Promise<Response> {
-	const marketService = new MarketService(env.TRADES_DB);
+	const marketService = new MarketService(env.PANOMARKET_DB);
 	const segments = path.split('/').filter(Boolean);
 	
 	// GET /markets-manage - List all markets

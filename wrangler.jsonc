@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "durable-object-starter",
+	"name": "panomarket",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-09",
 	"migrations": [
@@ -38,9 +38,9 @@
 	 */
 	"d1_databases": [
 		{
-			"binding": "TRADES_DB",
-			"database_name": "panomarket-trades",
-			"database_id": "your-database-id-placeholder"
+			"binding": "PANOMARKET_DB",
+			"database_name": "panomarket-db",
+			"database_id": "YOUR_DATABASE_ID"
 		}
 	]
 	/**

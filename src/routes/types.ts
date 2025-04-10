@@ -6,7 +6,7 @@ import { Order, Trade } from '../types';
 export interface Env {
 	ORDER_BOOK: DurableObjectNamespace;
 	BALANCES: DurableObjectNamespace;
-	TRADES_DB: D1Database;
+	PANOMARKET_DB: D1Database;
 }
 
 export interface OrderBookStub extends DurableObjectStub {

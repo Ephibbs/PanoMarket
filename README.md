@@ -2,9 +2,7 @@
   <h1>💎 Pano</h1>
   <p><strong>The open-source centralized exchange for anything</strong></p>
   
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-  [![Built with Cloudflare Workers](https://img.shields.io/badge/Built%20with-Cloudflare%20Workers-orange.svg)](https://workers.cloudflare.com/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-4.9+-blue.svg)](https://www.typescriptlang.org/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Built with Cloudflare Workers](https://img.shields.io/badge/Built%20with-Cloudflare-orange.svg)](https://workers.cloudflare.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-blue.svg)](https://www.typescriptlang.org/)
   
   <p>
     <a href="#overview">Overview</a> •
@@ -18,23 +16,32 @@
 
 ---
 
-We all hear about decentralized crypto and NFTs, but nearly everyone interfaces with them through centralized exchanges (i.e. coinbase, binance, etc). Also they are limited to crypto assets. Pano is a centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for anything. Built on Cloudflare's edge infrastructure, it provides global scalability and low-latency trading capabilities of up to ~100 orders/second for any asset pair.
+We all hear about decentralized crypto and NFTs, but nearly everyone interfaces with them through centralized exchanges (i.e. coinbase, binance, etc). Also they are limited to crypto assets. Pano is a centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for anything. Built on Cloudflare's edge infrastructure, it provides global scalability and ultra-high throughput trading capabilities of up to ~300 orders/second for any asset pair.
 
 
 
 ## Overview
 
-Pano Market is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare, it provides global scalability and low-latency trading capabilities.
+Pano Market is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare, it provides global scalability and ultra-high throughput trading capabilities.
 
 ## Features
 
 - **Create Markets for Anything**: Create and operate markets for any asset pair
 - **Global Scalability**: Leveraging Cloudflare's global network for worldwide accessibility
-- **Low Latency**: Built for high-performance trading with minimal delay
+- **Low Latency**: Built for high-performance trading with less than 330ms average latency for 100 concurrent orders
+- **High Throughput**: Handles more than 300 orders/second for each asset pair
 - **Serverless Architecture**: No servers to maintain, scale automatically with demand
 - **Complete Customizability**: Adapt and extend to meet specific market requirements
-- **High Throughput**: Handle up to ~100 orders/second for any asset pair
 - **Isolated Markets**: Each market runs in its own Durable Object for data consistency and reliability
+
+## Performance
+
+<div align="center">
+  <img src="assets/latency-graph.png" alt="Panomarket Latency Performance" width="700">
+  <p><em>Figure: Average order execution latency across different regions</em></p>
+</div>
+
+The test was performed by running each number of concurrent orders for 10 seconds.
 
 ## Technology Stack
 
@@ -79,15 +86,15 @@ This project uses Cloudflare D1 to store trade history and market information. F
 
 1. Create a new D1 database:
 ```bash
-npx wrangler d1 create panomarket-trades
+npx wrangler d1 create panomarket-db
 ```
 
 2. Take note of the database ID returned by the command and update it in `wrangler.jsonc`:
 ```json
 "d1_databases": [
     {
-        "binding": "TRADES_DB",
-        "database_name": "panomarket-trades",
+        "binding": "PANOMARKET_DB",
+        "database_name": "panomarket-db",
         "database_id": "YOUR_DATABASE_ID"
     }
 ]
@@ -95,7 +102,7 @@ npx wrangler d1 create panomarket-trades
 
 3. Apply the database migrations:
 ```bash
-npx wrangler d1 migrations apply panomarket-trades
+npx wrangler d1 migrations apply panomarket-db
 ```
 
 4. You can test the D1 database by deploying the worker:
