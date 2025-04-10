@@ -38,20 +38,13 @@ export async function handleMarketsManagementRoutes(
 		const data = await request.json() as MarketCreateRequest;
 		
 		// Validate required fields
-		if (!data.name || !data.buy_asset || !data.sell_asset) {
-			return errorResponse('Missing required fields: name, buy_asset, sell_asset');
-		}
-		
-		// Check if market already exists
-		const existingMarket = await marketService.getMarketByAssets(data.buy_asset, data.sell_asset);
-		if (existingMarket) {
-			return errorResponse('A market with this asset pair already exists');
+		if (!data.buy_asset || !data.sell_asset) {
+			return errorResponse('Missing required fields: buy_asset, sell_asset');
 		}
 		
 		// Create new market
 		const market: Market = {
-			id: `market-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`,
-			name: data.name,
+			id: `${data.buy_asset}:${data.sell_asset}`,
 			buy_asset: data.buy_asset,
 			sell_asset: data.sell_asset,
 			description: data.description,
@@ -63,9 +56,13 @@ export async function handleMarketsManagementRoutes(
 			updated_at: new Date().toISOString()
 		};
 		
-		await marketService.createMarket(market);
+		const result = await marketService.createMarket(market);
 		
-		return jsonResponse(market, 201);
+		if (!result.success) {
+			return errorResponse(result.message, 400);
+		}
+		
+		return jsonResponse(result.message, 201);
 	}
 	
 	// PATCH /markets-manage/{id} - Update a market

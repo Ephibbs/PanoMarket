@@ -1,7 +1,6 @@
 -- Create Markets table
 CREATE TABLE IF NOT EXISTS markets (
     id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
     buy_asset TEXT NOT NULL,
     sell_asset TEXT NOT NULL,
     description TEXT,

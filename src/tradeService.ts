@@ -43,10 +43,7 @@ export class TradeService {
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         );
 
-        const batch = this.db.batch();
-        
-        for (const trade of trades) {
-            batch.add(stmt.bind(
+        await this.db.batch(trades.map(trade => stmt.bind(
                 trade.id, 
                 trade.buy_asset, 
                 trade.sell_asset, 
@@ -57,10 +54,7 @@ export class TradeService {
                 trade.buy_user_id, 
                 trade.sell_user_id, 
                 trade.timestamp
-            ));
-        }
-        
-        await batch.commit();
+            )));
     }
 
     /**
@@ -71,7 +65,7 @@ export class TradeService {
             `SELECT * FROM trades ORDER BY timestamp DESC LIMIT 1000`
         ).all();
         
-        return result.results as Trade[];
+        return result.results as unknown as Trade[];
     }
 
     /**
@@ -88,7 +82,7 @@ export class TradeService {
         .bind(userId, userId)
         .all();
         
-        return result.results as Trade[];
+        return result.results as unknown as Trade[];
     }
 
     /**
@@ -104,7 +98,7 @@ export class TradeService {
         .bind(orderId, orderId)
         .all();
         
-        return result.results as Trade[];
+        return result.results as unknown as Trade[];
     }
 
     /**
@@ -122,6 +116,6 @@ export class TradeService {
         .bind(buyAsset, sellAsset, sellAsset, buyAsset)
         .all();
         
-        return result.results as Trade[];
+        return result.results as unknown as Trade[];
     }
 } 

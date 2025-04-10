@@ -25,18 +25,6 @@ export async function handleBalanceRoutes(
 		}
 	}
 
-	// POST /balances/{userId}
-	if (request.method === 'POST' && userId) {
-		const data = await request.json() as BalanceAddRequest;
-		
-		if (!data.asset || data.amount === undefined) {
-			return errorResponse('Missing required fields: asset, amount');
-		}
-		
-		const result = await balancesStub.addUserBalance(userId, data);
-		return jsonResponse(result);
-	}
-
 	// POST /balances/transfer
 	if (request.method === 'POST' && path.includes('/transfer')) {
 		const data = await request.json() as TransferRequest;
@@ -56,6 +44,18 @@ export async function handleBalanceRoutes(
 			success: result,
 			message: result ? 'Transfer completed' : 'Transfer failed'
 		});
+	}
+
+	// POST /balances/{userId}
+	if (request.method === 'POST' && userId) {
+		const data = await request.json() as BalanceAddRequest;
+		
+		if (!data.asset || data.amount === undefined) {
+			return errorResponse('Missing required fields: asset, amount');
+		}
+		
+		const result = await balancesStub.addUserBalance(userId, data);
+		return jsonResponse(result);
 	}
 
 	return errorResponse('Invalid request');

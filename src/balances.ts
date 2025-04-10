@@ -1,5 +1,6 @@
 import { DurableObject } from "cloudflare:workers";
 import { Order, Trade } from "./types";
+import { OrderRequest } from "./routes/types";
 
 /**
  * Balances - Durable Object implementation for managing user balances
@@ -107,6 +108,8 @@ export class Balances extends DurableObject {
      * @param amount - The amount to reserve
      */
     async reserveBalance(order: Order): Promise<boolean> {
+        let start, end;
+        const globalStart = Date.now();
         const { user_id, buy_asset, sell_asset, side, price, quantity } = order;
         const amount = side === 'buy' ? price * quantity : quantity;
         if (amount <= 0) {
@@ -117,6 +120,7 @@ export class Balances extends DurableObject {
         const userAssetKey = `${user_id}:${asset}`;
         
         // Check if the user has sufficient balance
+        start = Date.now();
         let balance = null;
         try {
             balance = this.sql.exec<{ available: number, reserved: number }>(`
@@ -125,12 +129,15 @@ export class Balances extends DurableObject {
         } catch (error) {
             throw new Error('Insufficient balance');
         }
+        end = Date.now();
+        console.log(` - Get balance took ${end - start}ms`);
 
         if (!balance || balance.available < amount) {
             return false;
         }
 
         // Update the balance
+        start = Date.now();
         this.sql.exec(`
             UPDATE balances 
             SET available = available - ?,
@@ -138,7 +145,10 @@ export class Balances extends DurableObject {
                 updated_at = ?
             WHERE user_asset = ?
         `, amount, amount, new Date().toISOString(), userAssetKey);
-
+        end = Date.now();
+        console.log(` - Update balance took ${end - start}ms`);
+        const globalEnd = Date.now();
+        console.log(` - Global took ${globalEnd - globalStart}ms`);
         return true;
     }
 
@@ -219,9 +229,17 @@ export class Balances extends DurableObject {
 
         // Add to recipient
         const toUserAssetKey = `${toUserId}:${asset}`;
-        const recipientBalance = this.sql.exec(`
-            SELECT * FROM balances WHERE user_asset = ?
-        `, toUserAssetKey).one();
+        let recipientBalance = null;
+        try {
+            recipientBalance = this.sql.exec(`
+                SELECT * FROM balances WHERE user_asset = ?
+            `, toUserAssetKey).one();
+        } catch (error) {
+            // If the recipient doesn't exist, we'll create a new balance record
+            // This is a no-op here since we're catching the error when the recipient doesn't exist
+            // We'll create a new balance in the else block below
+            recipientBalance = null;
+        }
 
         if (recipientBalance) {
             // Update existing balance
@@ -249,9 +267,35 @@ export class Balances extends DurableObject {
      */
     async updateBalances(trades: Trade[]) {
         for (const trade of trades) {
-            const { buy_user_id, sell_user_id, price, quantity, buy_asset, sell_asset } = trade;
-            await this.transferBalance(buy_user_id, sell_user_id, buy_asset, price * quantity);
-            await this.transferBalance(sell_user_id, buy_user_id, sell_asset, quantity);
+            try {
+                const { buy_user_id, sell_user_id, price, quantity, buy_asset, sell_asset } = trade;
+                // Release reserved amounts
+                const buyAmount = price * quantity;
+                const sellAmount = quantity;
+                
+                // Release buyer's reserved buy_asset amount
+                this.sql.exec(`
+                    UPDATE balances 
+                    SET reserved = reserved - ?,
+                        available = available + ?
+                    WHERE user_asset = ?
+                `, buyAmount, buyAmount, `${buy_user_id}:${buy_asset}`);
+
+                // Release seller's reserved sell_asset amount
+                this.sql.exec(`
+                    UPDATE balances 
+                    SET reserved = reserved - ?,
+                        available = available + ?
+                    WHERE user_asset = ?
+                `, sellAmount, sellAmount, `${sell_user_id}:${sell_asset}`);
+
+                await this.transferBalance(buy_user_id, sell_user_id, buy_asset, buyAmount);
+                await this.transferBalance(sell_user_id, buy_user_id, sell_asset, sellAmount);
+            } catch (error) {
+                console.error('Error updating balances:', error);
+                return false;
+            }
         }
+        return true;
     }
 }

@@ -2,7 +2,7 @@
  * Route handlers for market operations
  */
 import { errorResponse, jsonResponse } from './helpers';
-import { BalancesStub, Env, OrderBookStub } from './types';
+import { BalancesStub, Env, OrderBookStub, OrderRequest } from './types';
 import { Order } from '../types';
 import { TradeService } from '../tradeService';
 
@@ -41,16 +41,25 @@ export async function handleMarketRoutes(
 
 	// POST /markets/{market}/orders
 	if (request.method === 'POST' && finalPath === 'orders') {
-		const order = await request.json() as Order;
+		const orderRequest = await request.json() as OrderRequest;
 		
 		// Validate order
-		if (!order.user_id || !order.side || !order.price || !order.quantity) {
+		if (!orderRequest.user_id || !orderRequest.side || !orderRequest.price || !orderRequest.quantity) {
 			return errorResponse('Invalid order: missing required fields');
 		}
+
+        const [buyAsset, sellAsset] = market.split(":");
+        const order = {
+            ...orderRequest,
+            id: crypto.randomUUID(),
+            buy_asset: buyAsset,
+            sell_asset: sellAsset
+        } as Order;
 		
 		// Reserve balance for the order
 		const balancesId = env.BALANCES.idFromName('global');
 		const balancesStub = env.BALANCES.get(balancesId) as unknown as BalancesStub;
+
 		const reserveResult = await balancesStub.reserveBalance(order);
 		
 		if (!reserveResult) {
@@ -59,7 +68,7 @@ export async function handleMarketRoutes(
 		
 		// Process the order
 		const { status, trades, remainingQuantity, orderStatus } = await stub.handleOrder(order);
-		
+
 		// Update balances based on trades
 		const updateResult = await balancesStub.updateBalances(trades);
 		
@@ -72,7 +81,6 @@ export async function handleMarketRoutes(
 			const tradeService = new TradeService(env.TRADES_DB);
 			await tradeService.saveTrades(trades);
 		}
-		
 		return jsonResponse({ status, trades, remainingQuantity, orderStatus });
 	}
 

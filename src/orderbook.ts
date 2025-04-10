@@ -165,9 +165,9 @@ export class OrderBook extends DurableObject {
 
                 // Create trade record
                 const trade: Trade = {
-                    id: `trade-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`,
-                    buy_asset: side === 'buy' ? buyAsset : sellAsset,
-                    sell_asset: side === 'buy' ? sellAsset : buyAsset,
+                    id: crypto.randomUUID(),
+                    buy_asset: buyAsset,
+                    sell_asset: sellAsset,
                     price: matchingOrder.price,
                     quantity: fillQuantity,
                     buy_order_id: side === 'buy' ? orderId : matchingOrder.id,

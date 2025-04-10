@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>💸 Pano</h1>
+  <h1>💎 Pano</h1>
   <p><strong>The open-source centralized exchange for anything</strong></p>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -24,11 +24,11 @@ We all hear about decentralized crypto and NFTs, but nearly everyone interfaces 
 
 ## Overview
 
-Pano Market is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare's edge infrastructure, it provides global scalability and low-latency trading capabilities.
+Pano Market is a serverless exchange platform infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for any asset. Built on Cloudflare, it provides global scalability and low-latency trading capabilities.
 
 ## Features
 
-- **Create Markets for Anything**: Anyone can create and operate markets for any asset pair
+- **Create Markets for Anything**: Create and operate markets for any asset pair
 - **Global Scalability**: Leveraging Cloudflare's global network for worldwide accessibility
 - **Low Latency**: Built for high-performance trading with minimal delay
 - **Serverless Architecture**: No servers to maintain, scale automatically with demand

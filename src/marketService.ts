@@ -11,35 +11,58 @@ export class MarketService {
      * Create a new market
      * @param market - The market data
      */
-    async createMarket(market: Market): Promise<void> {
-        // Ensure timestamps are set
-        if (!market.created_at) {
-            market.created_at = new Date().toISOString();
+    async createMarket(market: Market): Promise<{ success: boolean, message: string }> {
+        try {
+            // Ensure timestamps are set
+            if (!market.created_at) {
+                market.created_at = new Date().toISOString();
+            }
+            if (!market.updated_at) {
+                market.updated_at = new Date().toISOString();
+            }
+            
+            await this.db.prepare(
+                `INSERT INTO markets 
+                (id, buy_asset, sell_asset, description, min_order_size, 
+                price_precision, quantity_precision, status, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            )
+            .bind(
+                market.id,
+                market.buy_asset,
+                market.sell_asset,
+                market.description || null,
+                market.min_order_size || null,
+                market.price_precision || null,
+                market.quantity_precision || null,
+                market.status,
+                market.created_at,
+                market.updated_at
+            )
+            .run();
+
+            return {
+                success: true,
+                message: `Market ${market.id} created successfully`
+            }
+        } catch (error) {
+            // Check if the error is due to a duplicate ID
+            if (error instanceof Error) {
+                const errorMessage = error.message.toLowerCase();
+                if (errorMessage.includes('unique constraint') || 
+                    errorMessage.includes('duplicate') || 
+                    errorMessage.includes('already exists')) {
+                    return {
+                        success: false,
+                        message: `Market with ID ${market.id} already exists`
+                    }
+                }
+            }
+            return {
+                success: false,
+                message: `Error creating market: ${error}`
+            }
         }
-        if (!market.updated_at) {
-            market.updated_at = new Date().toISOString();
-        }
-        
-        await this.db.prepare(
-            `INSERT INTO markets 
-             (id, name, buy_asset, sell_asset, description, min_order_size, 
-              price_precision, quantity_precision, status, created_at, updated_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        )
-        .bind(
-            market.id,
-            market.name,
-            market.buy_asset,
-            market.sell_asset,
-            market.description || null,
-            market.min_order_size || null,
-            market.price_precision || null,
-            market.quantity_precision || null,
-            market.status,
-            market.created_at,
-            market.updated_at
-        )
-        .run();
     }
 
     /**
@@ -48,8 +71,8 @@ export class MarketService {
      */
     async getAllMarkets(activeOnly = false): Promise<Market[]> {
         const query = activeOnly 
-            ? 'SELECT * FROM markets WHERE status = ? ORDER BY name'
-            : 'SELECT * FROM markets ORDER BY name';
+            ? 'SELECT * FROM markets WHERE status = ? ORDER BY id'
+            : 'SELECT * FROM markets ORDER BY id';
         
         const params = activeOnly ? ['active'] : [];
         

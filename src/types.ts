@@ -46,7 +46,6 @@ export interface Balance {
  */
 export interface Market {
     id: string;
-    name: string;
     buy_asset: string;
     sell_asset: string;
     description?: string;

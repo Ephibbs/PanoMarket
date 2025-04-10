@@ -42,7 +42,6 @@ export interface BalanceAddRequest {
 }
 
 export interface MarketCreateRequest {
-	name: string;
 	buy_asset: string;
 	sell_asset: string;
 	description?: string;
@@ -59,3 +58,10 @@ export interface MarketUpdateRequest {
 	quantity_precision?: number;
 	status?: 'active' | 'inactive' | 'deprecated';
 } 
+
+export interface OrderRequest {
+	user_id: string;
+	side: 'buy' | 'sell';
+	price: number;
+	quantity: number;
+}
