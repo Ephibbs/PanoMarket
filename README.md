@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>💸 Pano</h1>
+  <h1>💎 Pano</h1>
   <p><strong>The open-source centralized exchange for anything</strong></p>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
