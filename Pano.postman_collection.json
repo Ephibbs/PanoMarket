@@ -1,0 +1,378 @@
+{
+	"info": {
+		"_postman_id": "d3038b15-e91b-4f4b-aaf0-65c3f6833278",
+		"name": "Pano",
+		"description": "The serverless exchange for literally anything.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7134357"
+	},
+	"item": [
+		{
+			"name": "Market Management",
+			"item": [
+				{
+					"name": "Get All Markets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/markets-manage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets-manage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Market By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/markets-manage/USD:BTC",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets-manage",
+								"USD:BTC"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Market",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"USD:BTC\",\n    \"buy_asset\": \"USD\",\n    \"sell_asset\": \"BTC\",\n    \"description\": \"\",\n    \"min_order_size\": 1,\n    \"price_precision\": 0.01,\n    \"quantity_precision\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/markets-manage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets-manage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Market",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"min_order_size\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/markets-manage/USD:BTC",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets-manage",
+								"USD:BTC"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Balances",
+			"item": [
+				{
+					"name": "Get All Balances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/balances",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"balances"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Balance by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/balances/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"balances",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Balance to user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"asset\": \"BTC\",\n    \"amount\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/balances/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"balances",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Balance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fromUserId\": \"2\",\n    \"toUserId\": \"1\",\n    \"asset\": \"USD\",\n    \"amount\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/balances/transfer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"balances",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trades",
+			"item": [
+				{
+					"name": "Get All Trades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trades",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"trades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User's Trades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trades/user/user_9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"trades",
+								"user",
+								"user_9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get trades for an order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trades/order/a936a615-92c1-494e-a163-39a95c2e72da",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"trades",
+								"order",
+								"a936a615-92c1-494e-a163-39a95c2e72da"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get trades for a market",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trades/market/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"trades",
+								"market",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Market Orders",
+			"item": [
+				{
+					"name": "Get Order Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/markets/USD:BTC/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets",
+								"USD:BTC",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User's orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/markets/USD:BTC/orders/user_9",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets",
+								"USD:BTC",
+								"orders",
+								"user_9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place a new order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"1\",\n    \"side\": \"buy\",\n    \"price\": 1,\n    \"quantity\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/markets/USD:BTC/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"markets",
+								"USD:BTC",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8787",
+			"type": "string"
+		}
+	]
+}

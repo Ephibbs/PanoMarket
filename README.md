@@ -1,8 +1,8 @@
 <div align="center">
   <h1>💎 Pano</h1>
-  <p><strong>The open-source centralized exchange for anything</strong></p>
+  <p><strong>The global centralized exchange for anything</strong></p>
   
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Built with Cloudflare Workers](https://img.shields.io/badge/Built%20with-Cloudflare-orange.svg)](https://workers.cloudflare.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-blue.svg)](https://www.typescriptlang.org/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE) [![Built with Cloudflare Workers](https://img.shields.io/badge/Built%20with-Cloudflare-orange.svg)](https://workers.cloudflare.com/) [![Throughput](https://img.shields.io/badge/Throughput-330%20orders%2Fs-success.svg)](#performance)
   
   <p>
     <a href="#overview">Overview</a> •
@@ -16,9 +16,7 @@
 
 ---
 
-We all hear about decentralized crypto and NFTs, but nearly everyone interfaces with them through centralized exchanges (i.e. coinbase, binance, etc). Also they are limited to crypto assets. Pano is a centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for anything. Built on Cloudflare's edge infrastructure, it provides global scalability and ultra-high throughput trading capabilities of up to ~300 orders/second for any asset pair.
-
-
+We all hear about decentralized assets like bitcoin and NFTs, but nearly everyone trades them through centralized exchanges (i.e. coinbase, binance, etc). But what if you could just spin up a centralized exchange for anything, not just crypto or stocks. Pano is centralized serverless exchange infrastructure built on top of Cloudflare that allows creating auto-scalable clusters of trading markets for literally anything. Built on Cloudflare's edge infrastructure, it provides global scalability and ultra-high throughput trading capabilities of up to ~330 orders/second for any asset pair.
 
 ## Overview
 
@@ -26,10 +24,11 @@ Pano Market is a serverless exchange platform infrastructure built on top of Clo
 
 ## Features
 
-- **Create Markets for Anything**: Create and operate markets for any asset pair
+- **Create Markets**: Create your own assets and operate markets for any asset pair
+- **Centralized Ledger**: Track asset balances for millions of users
 - **Global Scalability**: Leveraging Cloudflare's global network for worldwide accessibility
-- **Low Latency**: Built for high-performance trading with less than 330ms average latency for 100 concurrent orders
-- **High Throughput**: Handles more than 300 orders/second for each asset pair
+- **Low Latency**: Built for high-performance trading at 330ms average latency for 100 concurrent requests
+- **High Throughput**: Handles up to ~330 orders/second
 - **Serverless Architecture**: No servers to maintain, scale automatically with demand
 - **Complete Customizability**: Adapt and extend to meet specific market requirements
 - **Isolated Markets**: Each market runs in its own Durable Object for data consistency and reliability
@@ -150,6 +149,8 @@ Pano exposes RESTful APIs for interacting with markets:
 | GET | `/trades/order/:orderId` | Get trades for a specific order |
 | GET | `/trades/market/:buyAsset/:sellAsset` | Get trades for a specific market |
 
+Try out the API using the [Postman collection](Pano.postman_collection.json).
+
 ## Architecture
 
 Panomarket uses Cloudflare Durable Objects to create isolated markets. Each market is a separate Durable Object instance, allowing for:
@@ -158,16 +159,6 @@ Panomarket uses Cloudflare Durable Objects to create isolated markets. Each mark
 - Horizontal scaling across different markets
 - Protection against data races
 - Optimal global routing to minimize latency
-
-## Use Cases
-
-- Cryptocurrency trading
-- In-game item marketplaces
-- Tokenized asset exchanges
-- Prediction markets
-- NFT marketplaces
-- Carbon credit trading
-- Any other asset that can be traded
 
 ## Contributing
 
