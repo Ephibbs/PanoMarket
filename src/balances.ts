@@ -1,6 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
 import { Order, Trade } from "./types";
-import { OrderRequest } from "./routes/types";
 
 /**
  * Balances - Durable Object implementation for managing user balances

@@ -5,6 +5,7 @@ import { errorResponse, jsonResponse } from './helpers';
 import { BalancesStub, Env, OrderBookStub, OrderRequest } from './types';
 import { Order } from '../types';
 import { TradeService } from '../tradeService';
+import { TradeBroadcaster } from '../broadcast';
 
 export async function handleMarketRoutes(
 	request: Request,
@@ -86,12 +87,17 @@ export async function handleMarketRoutes(
             await balancesStub.updateBalances(trades);
             end = Date.now();
             console.log(` - Update balances took ${end - start}ms`);
+
+            const id = env.TRADE_BROADCASTER.idFromName(market);
+            const broadcasterStub = env.TRADE_BROADCASTER.get(id) as unknown as TradeBroadcaster;
             
             // Save trades to D1 database
             start = Date.now();
             if (trades.length > 0) {
+				console.log('Saving trades to D1 database');
                 const tradeService = new TradeService(env.PANOMARKET_DB);
                 await tradeService.saveTrades(trades);
+				await broadcasterStub.broadcastTrades(trades);
             }
             end = Date.now();
             console.log(` - Save trades took ${end - start}ms`);

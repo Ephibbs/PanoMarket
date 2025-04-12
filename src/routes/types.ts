@@ -7,6 +7,7 @@ export interface Env {
 	ORDER_BOOK: DurableObjectNamespace;
 	BALANCES: DurableObjectNamespace;
 	PANOMARKET_DB: D1Database;
+	TRADE_BROADCASTER: DurableObjectNamespace;
 }
 
 export interface OrderBookStub extends DurableObjectStub {

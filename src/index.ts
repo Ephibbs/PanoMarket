@@ -1,5 +1,6 @@
 import { OrderBook } from './orderbook';
 import { Balances } from './balances';
+import { TradeBroadcaster } from './broadcast';
 import { 
 	handleBalanceRoutes,
 	handleTradeRoutes,
@@ -8,7 +9,7 @@ import {
 	Env 
 } from './routes';
 
-export { OrderBook, Balances };
+export { OrderBook, Balances, TradeBroadcaster };
 
 // Main handler for Cloudflare Worker
 export default {
@@ -25,10 +26,16 @@ export default {
 			const url = new URL(request.url);
 			const path = url.pathname;
 
+			console.log('path', path);
             // Perform user authentication...
 
 			// Route requests to appropriate handlers
-			if (path.startsWith('/balances')) {
+			if (url.pathname.startsWith("/ws/")) {
+				const asset = url.pathname.split("/ws/")[1];
+				const id = env.TRADE_BROADCASTER.idFromName(asset);
+				const stub = env.TRADE_BROADCASTER.get(id);
+				return stub.fetch(request); // Proxy WebSocket upgrade
+			} else if (path.startsWith('/balances')) {
 				return await handleBalanceRoutes(request, env, path);
 			} else if (path.startsWith('/trades')) {
 				return await handleTradeRoutes(request, env, path);

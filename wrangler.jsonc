@@ -25,6 +25,10 @@
 			{
 				"class_name": "Balances",
 				"name": "BALANCES"
+			},
+			{
+				"class_name": "TradeBroadcaster",
+				"name": "TRADE_BROADCASTER"
 			}
 		]
 	},

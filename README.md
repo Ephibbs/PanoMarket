@@ -25,7 +25,7 @@ What if you could just spin up a centralized exchange for anything, not just cry
 - **Create Markets**: Create your own assets and operate markets for any asset pair
 - **Centralized Ledger**: Track asset balances for millions of users
 - **Global Scalability**: Leveraging Cloudflare's global network for worldwide accessibility
-- **Low Latency**: Built for high-performance trading at 330ms average latency for 100 concurrent requests
+- **Low Latency**: Built for high-performance trading at <30ms latency
 - **High Throughput**: Handles up to ~330 orders/second
 - **Serverless Architecture**: No servers to maintain, scale automatically with demand
 - **Complete Customizability**: Adapt and extend to meet specific market requirements
@@ -118,6 +118,7 @@ Pano exposes RESTful APIs for interacting with markets:
 | GET | `/markets/:market/orders` | Get the full order book for a market |
 | GET | `/markets/:market/orders/:userId` | Get orders for a specific user |
 | POST | `/markets/:market/orders` | Place a new order (requires order details) |
+| WS | `/ws/:market` | WebSocket connection for real-time market trade updates |
 
 ### Market Management Endpoints
 
@@ -146,6 +147,8 @@ Pano exposes RESTful APIs for interacting with markets:
 | GET | `/trades/user/:userId` | Get trades for a specific user |
 | GET | `/trades/order/:orderId` | Get trades for a specific order |
 | GET | `/trades/market/:buyAsset/:sellAsset` | Get trades for a specific market |
+
+
 
 Try out the API using the [Postman collection](Pano.postman_collection.json).
 
