@@ -35,7 +35,7 @@ What if you could just spin up a centralized exchange for anything, not just cry
 
 <div align="center">
   <img src="assets/latency-graph.png" alt="Panomarket Latency Performance" width="700">
-  <p><em>Figure: Average order execution latency across different regions</em></p>
+  <p><em>Figure: Average order execution latency including travel time to the closest Cloudflare edge node</em></p>
 </div>
 
 The test was performed by running each number of concurrent orders for 10 seconds.
